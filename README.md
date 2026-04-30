@@ -1,4 +1,4 @@
-# 🚀 LLM Inference Pipeline Accelerator — Cycle-Level Simulator
+# 🚀 LLM Inference Pipeline Accelerator 
 
 **Computer Architecture Project**
 
@@ -60,6 +60,7 @@ The simulator integrates modern research techniques such as **FlashAttention, sp
 ```
 .
 ├── Team_Flash_Decode.ipynb   # Main simulation notebook
+├── Outputs                   # Output images
 ├── README.md                 # Project documentation
 ```
 
@@ -130,7 +131,8 @@ The simulator generates:
 
 **Team Flash Decode**
 
-(Add your team member names here)
+Priyal Chiragbhai Shah - 035255452
+Shlok Kaushikbhai Patel - 035257987
 
 ---
 
