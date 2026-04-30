@@ -1,0 +1,384 @@
+{
+  "model": {
+    "name": "LLaMA-7B",
+    "hidden_dim": 4096,
+    "num_heads": 32,
+    "num_layers": 32,
+    "ffn_dim": 11008,
+    "vocab_size": 32000,
+    "max_seq_len": 4096,
+    "use_swiglu": true,
+    "num_kv_heads": 32
+  },
+  "hw": {
+    "name": "LLM-Accel-v1",
+    "clock_ghz": 1.0,
+    "num_pes": 256,
+    "sram_capacity_kb": 1024,
+    "sram_bw_bytes_cyc": 512,
+    "hbm_bw_gb_s": 900.0,
+    "precision": "fp16",
+    "pipeline_stages": 4,
+    "enable_kernel_fusion": false,
+    "energy_pj_per_flop": 0.5,
+    "energy_pj_per_hbm_byte": 10.0,
+    "energy_pj_per_sram_byte": 0.5
+  },
+  "result": {
+    "model_name": "LLaMA-7B",
+    "hw_name": "LLM-Accel-v1",
+    "seq_len": 512,
+    "layer_cycles": 1202205,
+    "total_cycles": 22597392,
+    "cycles_per_token": 44136,
+    "latency_ms": 22.597392,
+    "throughput_tok_s": 44.252894316299866,
+    "energy_uj": 224371.048448,
+    "dominant_stage": "Output LN + Vocab Proj",
+    "memory_bound_pct": 35.294117647058826
+  },
+  "stages": [
+    {
+      "name": "Embedding Lookup",
+      "flops": 0,
+      "weight_bytes": 8192,
+      "activation_bytes": 8192,
+      "compute_cycles": 0,
+      "memory_cycles": 26,
+      "latency_cycles": 26,
+      "bound": "memory",
+      "arith_intensity": 0.0
+    },
+    {
+      "name": "LayerNorm (pre-Attn)",
+      "flops": 20480,
+      "weight_bytes": 16384,
+      "activation_bytes": 8192,
+      "compute_cycles": 40,
+      "memory_cycles": 35,
+      "latency_cycles": 40,
+      "bound": "compute",
+      "arith_intensity": 0.8333333333333334
+    },
+    {
+      "name": "Q Projection",
+      "flops": 33554432,
+      "weight_bytes": 33554432,
+      "activation_bytes": 8192,
+      "compute_cycles": 65536,
+      "memory_cycles": 37299,
+      "latency_cycles": 65536,
+      "bound": "compute",
+      "arith_intensity": 0.9997559189650964
+    },
+    {
+      "name": "KV Projection (GQA-aware)",
+      "flops": 67108864,
+      "weight_bytes": 67108864,
+      "activation_bytes": 8192,
+      "compute_cycles": 131072,
+      "memory_cycles": 74582,
+      "latency_cycles": 131072,
+      "bound": "compute",
+      "arith_intensity": 0.9998779445868424
+    },
+    {
+      "name": "KV-Cache Write",
+      "flops": 0,
+      "weight_bytes": 0,
+      "activation_bytes": 16384,
+      "compute_cycles": 0,
+      "memory_cycles": 32,
+      "latency_cycles": 32,
+      "bound": "memory",
+      "arith_intensity": 0.0
+    },
+    {
+      "name": "KV-Cache Read",
+      "flops": 0,
+      "weight_bytes": 0,
+      "activation_bytes": 8388608,
+      "compute_cycles": 0,
+      "memory_cycles": 16384,
+      "latency_cycles": 16384,
+      "bound": "memory",
+      "arith_intensity": 0.0
+    },
+    {
+      "name": "Attention Score (QKt)",
+      "flops": 4194304,
+      "weight_bytes": 0,
+      "activation_bytes": 40960,
+      "compute_cycles": 8192,
+      "memory_cycles": 80,
+      "latency_cycles": 8192,
+      "bound": "compute",
+      "arith_intensity": 102.4
+    },
+    {
+      "name": "Softmax",
+      "flops": 81920,
+      "weight_bytes": 0,
+      "activation_bytes": 32768,
+      "compute_cycles": 160,
+      "memory_cycles": 64,
+      "latency_cycles": 160,
+      "bound": "compute",
+      "arith_intensity": 2.5
+    },
+    {
+      "name": "Attention Weighted Sum",
+      "flops": 4194304,
+      "weight_bytes": 0,
+      "activation_bytes": 40960,
+      "compute_cycles": 8192,
+      "memory_cycles": 80,
+      "latency_cycles": 8192,
+      "bound": "compute",
+      "arith_intensity": 102.4
+    },
+    {
+      "name": "Attention Output Proj",
+      "flops": 33554432,
+      "weight_bytes": 33554432,
+      "activation_bytes": 16384,
+      "compute_cycles": 65536,
+      "memory_cycles": 37315,
+      "latency_cycles": 65536,
+      "bound": "compute",
+      "arith_intensity": 0.9995119570522206
+    },
+    {
+      "name": "Residual Add (post-Attn)",
+      "flops": 4096,
+      "weight_bytes": 0,
+      "activation_bytes": 16384,
+      "compute_cycles": 8,
+      "memory_cycles": 32,
+      "latency_cycles": 32,
+      "bound": "memory",
+      "arith_intensity": 0.25
+    },
+    {
+      "name": "LayerNorm (pre-MLP)",
+      "flops": 20480,
+      "weight_bytes": 16384,
+      "activation_bytes": 8192,
+      "compute_cycles": 40,
+      "memory_cycles": 35,
+      "latency_cycles": 40,
+      "bound": "compute",
+      "arith_intensity": 0.8333333333333334
+    },
+    {
+      "name": "MLP Gate/Up Proj (SwiGLU)",
+      "flops": 180355072,
+      "weight_bytes": 180355072,
+      "activation_bytes": 8192,
+      "compute_cycles": 352256,
+      "memory_cycles": 200411,
+      "latency_cycles": 352256,
+      "bound": "compute",
+      "arith_intensity": 0.9999545805513921
+    },
+    {
+      "name": "SwiGLU Activation",
+      "flops": 22016,
+      "weight_bytes": 0,
+      "activation_bytes": 44032,
+      "compute_cycles": 43,
+      "memory_cycles": 86,
+      "latency_cycles": 86,
+      "bound": "memory",
+      "arith_intensity": 0.5
+    },
+    {
+      "name": "MLP Down Proj",
+      "flops": 90177536,
+      "weight_bytes": 90177536,
+      "activation_bytes": 30208,
+      "compute_cycles": 176128,
+      "memory_cycles": 100257,
+      "latency_cycles": 176128,
+      "bound": "compute",
+      "arith_intensity": 0.9996651285282115
+    },
+    {
+      "name": "Residual Add (post-MLP)",
+      "flops": 4096,
+      "weight_bytes": 0,
+      "activation_bytes": 16384,
+      "compute_cycles": 8,
+      "memory_cycles": 32,
+      "latency_cycles": 32,
+      "bound": "memory",
+      "arith_intensity": 0.25
+    },
+    {
+      "name": "Output LN + Vocab Proj",
+      "flops": 262164480,
+      "weight_bytes": 262160384,
+      "activation_bytes": 8192,
+      "compute_cycles": 512040,
+      "memory_cycles": 291306,
+      "latency_cycles": 512040,
+      "bound": "compute",
+      "arith_intensity": 0.9999843764647064
+    }
+  ],
+  "sensitivity": {
+    "hidden_dim": [
+      {
+        "value": 256,
+        "latency_ms": -0.075509,
+        "cycles": -75509
+      },
+      {
+        "value": 512,
+        "latency_ms": 0.045517,
+        "cycles": 45517
+      },
+      {
+        "value": 768,
+        "latency_ms": 0.363152,
+        "cycles": 363152
+      },
+      {
+        "value": 1024,
+        "latency_ms": 0.877362,
+        "cycles": 877362
+      },
+      {
+        "value": 2048,
+        "latency_ms": 6.611996,
+        "cycles": 6611996
+      },
+      {
+        "value": 4096,
+        "latency_ms": 30.034992,
+        "cycles": 30034992
+      }
+    ],
+    "num_heads": [
+      {
+        "value": 4,
+        "latency_ms": 22.59336,
+        "cycles": 22593360
+      },
+      {
+        "value": 8,
+        "latency_ms": 22.593936,
+        "cycles": 22593936
+      },
+      {
+        "value": 16,
+        "latency_ms": 22.595088,
+        "cycles": 22595088
+      },
+      {
+        "value": 32,
+        "latency_ms": 22.597392,
+        "cycles": 22597392
+      },
+      {
+        "value": 64,
+        "latency_ms": 22.602,
+        "cycles": 22602000
+      }
+    ],
+    "seq_len": [
+      {
+        "value": 64,
+        "latency_ms": 15.49416,
+        "cycles": 15494160,
+        "kv_mb": 34.07872
+      },
+      {
+        "value": 128,
+        "latency_ms": 15.592944,
+        "cycles": 15592944,
+        "kv_mb": 67.633152
+      },
+      {
+        "value": 256,
+        "latency_ms": 20.012336,
+        "cycles": 20012336,
+        "kv_mb": 134.742016
+      },
+      {
+        "value": 512,
+        "latency_ms": 22.597392,
+        "cycles": 22597392,
+        "kv_mb": 268.959744
+      },
+      {
+        "value": 1024,
+        "latency_ms": 24.640688,
+        "cycles": 24640688,
+        "kv_mb": 537.3952
+      },
+      {
+        "value": 2048,
+        "latency_ms": 27.163856,
+        "cycles": 27163856,
+        "kv_mb": 1074.266112
+      },
+      {
+        "value": 4096,
+        "latency_ms": 31.428464,
+        "cycles": 31428464,
+        "kv_mb": 2148.007936
+      }
+    ],
+    "num_layers": [
+      {
+        "value": 4,
+        "latency_ms": 3.272772,
+        "cycles": 3272772
+      },
+      {
+        "value": 8,
+        "latency_ms": 6.033432,
+        "cycles": 6033432
+      },
+      {
+        "value": 12,
+        "latency_ms": 8.794092,
+        "cycles": 8794092
+      },
+      {
+        "value": 16,
+        "latency_ms": 11.554752,
+        "cycles": 11554752
+      },
+      {
+        "value": 24,
+        "latency_ms": 17.076072,
+        "cycles": 17076072
+      },
+      {
+        "value": 32,
+        "latency_ms": 22.597392,
+        "cycles": 22597392
+      },
+      {
+        "value": 48,
+        "latency_ms": 33.640032,
+        "cycles": 33640032
+      }
+    ]
+  },
+  "fixes_applied": [
+    "F1: cycles_per_token",
+    "F2: KV all-layer read",
+    "F3: INT8 simulated",
+    "F4: analytical overlap",
+    "F5: hw energy constants",
+    "F6: prefill phase"
+  ],
+  "improvements": [
+    "I1: GQA/MQA support",
+    "I2: speculative decoding",
+    "I3: continuous batching"
+  ]
+}
